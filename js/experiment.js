@@ -6,12 +6,9 @@
 // Initialize jsPsych
 // -------------------------------
 const jsPsych = initJsPsych({
-  show_progress_bar: false, // Don't show progress bar to participants
+  show_progress_bar: false,
   on_finish: () => {
-    // Show the data at the end (for testing)
     jsPsych.data.displayData();
-
-    // Save data as CSV automatically
     const csv = jsPsych.data.get().csv();
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -23,31 +20,72 @@ const jsPsych = initJsPsych({
 });
 
 // -------------------------------
+// Instruction screens
+// -------------------------------
+const welcome_screen = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<div style="font-size:30px;">Welcome to the experiment</div>',
+  choices: "NO_KEYS", 
+  trial_duration: 2000
+
+};
+
+const enter_id_screen = {
+  type: jsPsychSurveyText,
+  questions: [
+    {
+      prompt: "Please enter your ID:",
+      name: 'participant_id',
+      required: true
+    }
+  ],
+  button_label: "Proceed to the experiment"
+};
+
+const consent_screen = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <div style="font-size:22px; margin-bottom:30px;">
+      Please read the participation rules and mark that you agree to continue.
+    </div>
+  `,
+  choices: ['I agree'],
+  button_html: (choice) => `<button class="jspsych-btn" style="font-size:20px; padding:12px 24px;">${choice}</button>`
+};
+
+
+const instructions = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <div style="font-size:22px; margin-bottom:30px;">
+      Those are the instructions
+    </div>
+  `,
+  choices: ['Proceed to the experiment'],
+  button_html: (choice) => `<button class="jspsych-btn" style="font-size:20px; padding:12px 24px;">${choice}</button>`
+};
+
+
+
+// -------------------------------
 // Define global variables
 // -------------------------------
-const trials = []; // This array will hold the full experiment timeline
-const total_trials = 12; // Updated to 60 trials
+const trials = [];
+const total_trials = 12;
 
-// Generate 30 ambiguous + 30 risky trials and shuffle
 let conditions = Array(total_trials / 2).fill('ambiguous').concat(Array(total_trials / 2).fill('risky'));
 conditions = jsPsych.randomization.shuffle(conditions);
 
-// Generate 20 red, 20 blue, 20 gray priming screens and shuffle
 let priming_colors = Array(total_trials / 3).fill('red')
   .concat(Array(total_trials / 3).fill('blue'))
   .concat(Array(total_trials / 3).fill('gray'));
 priming_colors = jsPsych.randomization.shuffle(priming_colors);
 
-// -------------------------------
-// Define all full trials
-// -------------------------------
 for (let i = 0; i < total_trials; i++) {
   const condition = conditions[i];
   const primingColor = priming_colors[i];
   const topLabel = condition === 'ambiguous' ? '?' : '50%';
 
-  // === 1. Black screen for 500ms ===
-  console.log("Running black screen with fixation...");
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<div style="width:100vw; height:100vh; background-color:black; display:flex; align-items:center; justify-content:center;"><div style="color:white; font-size:48px;">+</div></div>',
@@ -55,16 +93,14 @@ for (let i = 0; i < total_trials; i++) {
     trial_duration: 500
   });
 
-  // === 2. Colored screen for 1000ms ===
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<div style="width:100vw; height:100vh; background-color:${primingColor};"></div>`,
     choices: "NO_KEYS",
-    trial_duration: 1000,
-    data: { priming_color: primingColor } // Record which color was shown
+    trial_duration: 500,
+    data: { priming_color: primingColor }
   });
 
-  // === 3. Decision screen using improved visuals ===
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
@@ -127,8 +163,6 @@ for (let i = 0; i < total_trials; i++) {
     on_load: function() {
       const startTime = performance.now();
       const buttons = ['bet_blue', 'bet_red', 'receive_white_1', 'receive_white_2'];
-
-      // Attach click listeners to all custom buttons
       buttons.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -156,5 +190,4 @@ for (let i = 0; i < total_trials; i++) {
 // -------------------------------
 // Start the experiment
 // -------------------------------
-jsPsych.run(trials);
-
+jsPsych.run([welcome_screen, enter_id_screen, consent_screen, instructions, ...trials]);
