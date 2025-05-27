@@ -13,7 +13,7 @@ const jsPsych = initJsPsych({
 
     if (sw_pavlovia) {
       // Deployment mode: redirect to Prolific
-      window.location.href = "https://app.prolific.com/submissions/complete?cc=YOUR_COMPLETION_CODE";
+      window.location.href = prolific_redirect_url;
     } else {
       // Local mode: show and download data
       jsPsych.data.displayData();
@@ -41,7 +41,7 @@ const welcome_screen = {
     </div>
   `,
   choices: "NO_KEYS", 
-  trial_duration: 2000
+  trial_duration: welcome_screen_duration
 
 };
 
@@ -209,7 +209,7 @@ for (let i = 0; i < total_trials; i++) {
   }
 
   if (condition === 'part_risky') {
-    const options = [10, 20, 30, 40, 60, 70, 80, 90];
+    const options = part_risky_options ;
     const sampled = jsPsych.randomization.sampleWithoutReplacement(options, 1)[0];
     blueLabel = `${sampled}%`;
     redLabel = `${100 - sampled}%`;
@@ -491,7 +491,7 @@ const enter_age_screen = {
   on_finish: function(data) {
     const response = data.response.age;
     const numericAge = Number(response);
-    valid_age = !isNaN(numericAge) && numericAge >= 0 && numericAge <= 100;
+    valid_age = !isNaN(numericAge) && numericAge >= age_min && numericAge <= age_max;
   }
 };
 
