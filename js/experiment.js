@@ -47,14 +47,21 @@ const welcome_screen = {
 
 
 // -------------------------------
-// ID
+// ID test tes test
 // -------------------------------
+
+if (sw_pavlovia) {
+      // Deployment mode: redirect to Prolific
+    const participant_id = jsPsych.data.getURLVariable('participant');
+    jsPsych.data.addProperties({ participant_id });
+} 
+
 const enter_id_screen = {
   type: jsPsychSurveyText,
   questions: [
     {
       prompt: "Thank you for your willingness to participate in our experiment. Please enter your prolific ID.",
-      name: 'participant_id',
+      name: 'participant_id_manual',
       required: true
     }
   ],
