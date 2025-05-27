@@ -112,7 +112,10 @@ const instructions = {
 const trials = [];
 const total_trials = 6;
 
-let conditions = Array(total_trials / 2).fill('ambiguous').concat(Array(total_trials / 2).fill('risky'));
+// Define three conditions: ambiguous, full_risky, part_risky
+let conditions = Array(total_trials / 3).fill('ambiguous')
+  .concat(Array(total_trials / 3).fill('full_risky'))
+  .concat(Array(total_trials / 3).fill('part_risky'));
 conditions = jsPsych.randomization.shuffle(conditions);
 
 let priming_colors = Array(total_trials / 3).fill('red')
@@ -123,8 +126,24 @@ priming_colors = jsPsych.randomization.shuffle(priming_colors);
 for (let i = 0; i < total_trials; i++) {
   const condition = conditions[i];
   const primingColor = priming_colors[i];
-  const topLabel = condition === 'ambiguous' ? '?' : '50%';
 
+  // Define top labels based on condition
+  let blueLabel = '?';
+  let redLabel = '?';
+
+  if (condition === 'full_risky') {
+    blueLabel = '50%';
+    redLabel = '50%';
+  }
+
+  if (condition === 'part_risky') {
+    const options = [10, 20, 30, 40, 60, 70, 80, 90];
+    const sampled = jsPsych.randomization.sampleWithoutReplacement(options, 1)[0];
+    blueLabel = `${sampled}%`;
+    redLabel = `${100 - sampled}%`;
+  }
+
+  // Fixation cross
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<div style="width:100vw; height:100vh; background-color:black; display:flex; align-items:center; justify-content:center;"><div style="color:white; font-size:48px;">+</div></div>',
@@ -132,6 +151,7 @@ for (let i = 0; i < total_trials; i++) {
     trial_duration: 500
   });
 
+ // Color priming screen
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<div style="width:100vw; height:100vh; background-color:${primingColor};"></div>`,
@@ -140,6 +160,7 @@ for (let i = 0; i < total_trials; i++) {
     data: { priming_color: primingColor }
   });
 
+  // Decision screen
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
@@ -166,8 +187,8 @@ for (let i = 0; i < total_trials; i++) {
         <div style="margin-bottom: 50px; text-align: center; font-size: 26px;">
           <p>20 cards</p>
           <div style="display: flex; justify-content: center; gap: 80px;">
-            <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${topLabel}</div>
-            <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${topLabel}</div>
+            <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${blueLabel}</div>
+            <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${redLabel}</div>
           </div>
         </div>
         <div style="display: flex; justify-content: center; gap: 160px;">
@@ -194,7 +215,10 @@ for (let i = 0; i < total_trials; i++) {
       trial_index: i + 1,
       task: 'decision_trial',
       condition: condition,
-      priming_color: primingColor
+      priming_color: primingColor,
+      blueLabel: blueLabel,
+      redLabel: redLabel
+
     },
     on_start: function(trial) {
       trial.data.start_time = performance.now();
@@ -211,7 +235,9 @@ for (let i = 0; i < total_trials; i++) {
               response: id,
               rt: rt,
               condition: condition,
-              priming_color: primingColor
+              priming_color: primingColor,
+              blueLabel: blueLabel,
+              redLabel: redLabel
             });
           });
         }
