@@ -166,20 +166,20 @@ for (let i = 0; i < total_trials; i++) {
         <div style="margin-bottom: 50px; text-align: center; font-size: 26px;">
           <p>20 cards</p>
           <div style="display: flex; justify-content: center; gap: 80px;">
-            <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${topLabel}</div>
             <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${topLabel}</div>
+            <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${topLabel}</div>
           </div>
         </div>
         <div style="display: flex; justify-content: center; gap: 160px;">
           <div>
-            <div class="decision-label">I bet 10 Euro</div>
+            <div class="decision-label">I bet 1.5 Pound</div>
             <div style="display: flex; gap: 15px; justify-content: center;">
               <div id="bet_blue" class="option-square" style="background-color: blue;"></div>
               <div id="bet_red" class="option-square" style="background-color: red;"></div>
             </div>
           </div>
           <div>
-            <div class="decision-label">I receive 3 Euro</div>
+            <div class="decision-label">I receive 0.5 Pound</div>
             <div style="display: flex; gap: 15px; justify-content: center;">
               <div id="receive_white_1" class="option-square" style="background-color: white; border: 2px solid black;"></div>
               <div id="receive_white_2" class="option-square" style="background-color: white; border: 2px solid black;"></div>
