@@ -20,6 +20,15 @@ const jsPsych = initJsPsych({
 });
 
 // -------------------------------
+// Experiment Settings
+// -------------------------------
+const TOTAL_TRIALS = 6;           // Total number of trials
+const FIXATION_DURATION = 500;     // Duration of fixation screen (in ms)
+const PRIMING_DURATION = 200;      // Duration of priming screen (in ms)
+const Trial_DURATION = 10000;      // Duration of a trial (in ms)
+const answer_qeustions_screen_duration = 2000;
+
+// -------------------------------
 // Instruction screens
 // -------------------------------
 const welcome_screen = {
@@ -96,12 +105,74 @@ const consent_screen = {
 const instructions = {
   type: jsPsychHtmlButtonResponse,
   stimulus: `
-    <div style="font-size:22px; margin-bottom:30px;">
-      Those are the instructions
+    <div style="background-color:#222; color:white; padding:40px; font-size:18px; line-height:1.6; text-align:left;">
+
+      <p><strong>The experiment will last about 5 minutes.</strong></p>
+
+      <p>In this experiment, you will make a series of choices between a gamble with an uncertain payoff and a certain payoff. A sample screen is as follows:</p>
+
+      <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0;">
+        <!-- Full Risky Sample -->
+        <div style="background-color:black; padding:20px; border-radius:10px;">
+          <div style="text-align: center; color: white; font-size: 20px; margin-bottom: 20px;">20 cards</div>
+          <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;">
+            <div style="border: 2px solid blue; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">50%</div>
+            <div style="border: 2px solid red; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">50%</div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 60px;">
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.5 Pound</div>
+              <div style="display: flex; justify-content: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white;"></div>
+                <div style="width: 30px; height: 30px; background-color: red; border: 2px solid white;"></div>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Pound</div>
+               <div style="display: flex; justify-content: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ambiguous Sample -->
+        <div style="background-color:black; padding:20px; border-radius:10px;">
+          <div style="text-align: center; color: white; font-size: 20px; margin-bottom: 20px;">20 cards</div>
+          <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;">
+            <div style="border: 2px solid blue; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">?</div>
+            <div style="border: 2px solid red; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">?</div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 60px;">
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.5 Pound</div>
+               <div style="display: flex; justify-content: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white;"></div>
+                <div style="width: 30px; height: 30px; background-color: red; border: 2px solid white;"></div>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Pound</div>
+               <div style="display: flex; justify-content: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>In each card deck, there are 20 cards. The symbol on each card indicates the probability of drawing each type of card (blue or red) from the deck. In the left example, there is a 50% chance of drawing a blue card and a 50% chance of drawing a red card. In the right example, the probability of drawing a blue (or red) card is unknown.</p>
+
+      <p>You will be asked to choose a color to bet on or to receive a guaranteed amount. The pound amount above the lower cards shows the amount you will earn if the selected color matches the card that is drawn. At the end of the experiment, one of your trials will be randomly selected, and you will be rewarded accordingly.</p>
+
+      <p style="margin-top: 30px;"><strong>When you are ready to begin, press “Proceed”.</strong></p>
     </div>
   `,
-  choices: ['Proceed to the experiment'],
-  button_html: (choice) => `<button class="jspsych-btn" style="font-size:20px; padding:12px 24px;">${choice}</button>`
+  choices: ['Proceed'],
+  button_html: (choice) =>
+    `<button class="jspsych-btn" style="font-size:20px; padding:12px 24px; margin-top:20px;">${choice}</button>`
 };
 
 
@@ -110,9 +181,12 @@ const instructions = {
 // Define global variables
 // -------------------------------
 const trials = [];
-const total_trials = 6;
+const total_trials = TOTAL_TRIALS;
 
-let conditions = Array(total_trials / 2).fill('ambiguous').concat(Array(total_trials / 2).fill('risky'));
+// Define three conditions: ambiguous, full_risky, part_risky
+let conditions = Array(total_trials / 3).fill('ambiguous')
+  .concat(Array(total_trials / 3).fill('full_risky'))
+  .concat(Array(total_trials / 3).fill('part_risky'));
 conditions = jsPsych.randomization.shuffle(conditions);
 
 let priming_colors = Array(total_trials / 3).fill('red')
@@ -123,23 +197,41 @@ priming_colors = jsPsych.randomization.shuffle(priming_colors);
 for (let i = 0; i < total_trials; i++) {
   const condition = conditions[i];
   const primingColor = priming_colors[i];
-  const topLabel = condition === 'ambiguous' ? '?' : '50%';
 
+  // Define top labels based on condition
+  let blueLabel = '?';
+  let redLabel = '?';
+
+  if (condition === 'full_risky') {
+    blueLabel = '50%';
+    redLabel = '50%';
+  }
+
+  if (condition === 'part_risky') {
+    const options = [10, 20, 30, 40, 60, 70, 80, 90];
+    const sampled = jsPsych.randomization.sampleWithoutReplacement(options, 1)[0];
+    blueLabel = `${sampled}%`;
+    redLabel = `${100 - sampled}%`;
+  }
+
+  // Fixation cross
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<div style="width:100vw; height:100vh; background-color:black; display:flex; align-items:center; justify-content:center;"><div style="color:white; font-size:48px;">+</div></div>',
     choices: "NO_KEYS",
-    trial_duration: 500
+    trial_duration: FIXATION_DURATION
   });
 
+ // Color priming screen
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<div style="width:100vw; height:100vh; background-color:${primingColor};"></div>`,
     choices: "NO_KEYS",
-    trial_duration: 500,
+    trial_duration: PRIMING_DURATION,
     data: { priming_color: primingColor }
   });
 
+  // Decision screen
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
@@ -166,20 +258,20 @@ for (let i = 0; i < total_trials; i++) {
         <div style="margin-bottom: 50px; text-align: center; font-size: 26px;">
           <p>20 cards</p>
           <div style="display: flex; justify-content: center; gap: 80px;">
-            <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${topLabel}</div>
-            <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${topLabel}</div>
+            <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${blueLabel}</div>
+            <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${redLabel}</div>
           </div>
         </div>
         <div style="display: flex; justify-content: center; gap: 160px;">
           <div>
-            <div class="decision-label">I bet 10 Euro</div>
+            <div class="decision-label">I bet 1.5 Pound</div>
             <div style="display: flex; gap: 15px; justify-content: center;">
               <div id="bet_blue" class="option-square" style="background-color: blue;"></div>
               <div id="bet_red" class="option-square" style="background-color: red;"></div>
             </div>
           </div>
           <div>
-            <div class="decision-label">I receive 3 Euro</div>
+            <div class="decision-label">I receive 0.5 Pound</div>
             <div style="display: flex; gap: 15px; justify-content: center;">
               <div id="receive_white_1" class="option-square" style="background-color: white; border: 2px solid black;"></div>
               <div id="receive_white_2" class="option-square" style="background-color: white; border: 2px solid black;"></div>
@@ -189,12 +281,15 @@ for (let i = 0; i < total_trials; i++) {
       </div>
     `,
     choices: "NO_KEYS",
-    trial_duration: 10000,
+    trial_duration: Trial_DURATION,
     data: {
       trial_index: i + 1,
       task: 'decision_trial',
       condition: condition,
-      priming_color: primingColor
+      priming_color: primingColor,
+      blueLabel: blueLabel,
+      redLabel: redLabel
+
     },
     on_start: function(trial) {
       trial.data.start_time = performance.now();
@@ -211,7 +306,9 @@ for (let i = 0; i < total_trials; i++) {
               response: id,
               rt: rt,
               condition: condition,
-              priming_color: primingColor
+              priming_color: primingColor,
+              blueLabel: blueLabel,
+              redLabel: redLabel
             });
           });
         }
@@ -219,7 +316,7 @@ for (let i = 0; i < total_trials; i++) {
     },
     on_finish: function(data) {
       if (data.response == null) {
-        data.rt = 10000;
+        data.rt = Trial_DURATION;
         data.response = 'no_response';
       }
     }
@@ -234,7 +331,7 @@ const answer_questions = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:30px;">Please answer the following questions</div>',
   choices: "NO_KEYS", 
-  trial_duration: 2000
+  trial_duration: answer_qeustions_screen_duration
 
 };
 
