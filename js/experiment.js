@@ -1,32 +1,34 @@
 // === Full Experiment Code ===
-// Author: ChatGPT
+// Author: Tom Mushkat & ChatGPT 4o
 // Description: Card deck task with colored priming, decision screen, and reaction time measurement.
 
+
 // -------------------------------
-// Initialize jsPsych
+// Initialize jsPsych with dynamic on_finish
 // -------------------------------
 const jsPsych = initJsPsych({
   show_progress_bar: false,
-  on_finish: () => {
-    jsPsych.data.displayData();
-    const csv = jsPsych.data.get().csv();
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'experiment_data.csv';
-    a.click();
+  on_finish: function() {
+    jsPsych.data.get().addToLast({ completed: true });
+
+    if (sw_pavlovia) {
+      // Deployment mode: redirect to Prolific
+      window.location.href = "https://app.prolific.com/submissions/complete?cc=YOUR_COMPLETION_CODE";
+    } else {
+      // Local mode: show and download data
+      jsPsych.data.displayData();
+      const csv = jsPsych.data.get().csv();
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'experiment_data.csv';
+      a.click();
+    }
   }
 });
 
-// -------------------------------
-// Experiment Settings
-// -------------------------------
-const TOTAL_TRIALS = 6;           // Total number of trials
-const FIXATION_DURATION = 500;     // Duration of fixation screen (in ms)
-const PRIMING_DURATION = 200;      // Duration of priming screen (in ms)
-const Trial_DURATION = 10000;      // Duration of a trial (in ms)
-const answer_qeustions_screen_duration = 2000;
+
 
 // -------------------------------
 // Instruction screens
@@ -181,7 +183,6 @@ const instructions = {
 // Define global variables
 // -------------------------------
 const trials = [];
-const total_trials = TOTAL_TRIALS;
 
 // Define three conditions: ambiguous, full_risky, part_risky
 let conditions = Array(total_trials / 3).fill('ambiguous')
