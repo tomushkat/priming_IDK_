@@ -8,30 +8,12 @@
 // -------------------------------
 const jsPsych = initJsPsych({
   show_progress_bar: false,
-  on_finish: function() {
-    jsPsych.data.get().addToLast({ completed: true });
-
-    if (sw_pavlovia) {
-      // Deployment mode: redirect to Prolific
-      window.location.href = prolific_redirect_url;
-    } else {
-      // Local mode: show and download data
-      jsPsych.data.displayData();
-      const csv = jsPsych.data.get().csv();
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'experiment_data.csv';
-      a.click();
-    }
-  }
+  on_finish: handleExperimentFinish
 });
 
 
-
 // -------------------------------
-// Instruction screens
+// Welcome screens
 // -------------------------------
 const welcome_screen = {
   type: jsPsychHtmlKeyboardResponse,
@@ -42,7 +24,6 @@ const welcome_screen = {
   `,
   choices: "NO_KEYS", 
   trial_duration: welcome_screen_duration
-
 };
 
 
@@ -199,7 +180,7 @@ conditions = jsPsych.randomization.shuffle(conditions);
 
 let priming_colors = Array(total_trials / 3).fill('red')
   .concat(Array(total_trials / 3).fill('blue'))
-  .concat(Array(total_trials / 3).fill('gray'));
+  .concat(Array(total_trials / 3).fill('black'));
 priming_colors = jsPsych.randomization.shuffle(priming_colors);
 
 for (let i = 0; i < total_trials; i++) {
