@@ -1,7 +1,7 @@
 // -------------------------------
 // Set environment variables
 // -------------------------------
-const sw_pavlovia = false;  // true = deploy mode, false = local test
+const sw_pavlovia = True;  // true = deploy mode, false = local test
 const prolific_redirect_url = "example.com";
 
 function handleExperimentFinish() {
