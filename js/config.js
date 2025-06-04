@@ -1,8 +1,10 @@
 // -------------------------------
 // Set environment variables
 // -------------------------------
-const sw_pavlovia = True;  // true = deploy mode, false = local test
-const prolific_redirect_url = "example.com";
+const sw_pavlovia = false;  // true = deploy mode, false = local test
+const prolific_redirect_url = "https://app.prolific.com/submissions/complete?cc=C1N8TMYO";
+
+
 
 function handleExperimentFinish() {
   jsPsych.data.get().addToLast({ completed: true });
@@ -25,6 +27,7 @@ function handleExperimentFinish() {
 // Experiment Settings
 // -------------------------------
 const total_trials = 6;           // Total number of trials
+const pavlovia_trials = 120;
 const part_risky_options = [10, 20, 30, 40, 60, 70, 80, 90];
 
 // -------------------------------
