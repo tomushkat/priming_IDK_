@@ -249,99 +249,85 @@ for (let i = 0; i < total_trials; i++) {
     choices: "NO_KEYS",
     trial_duration: PRIMING_DURATION,
     data: { priming_color: primingColor }
-  });
+  })
+
 
   // Decision screen
-  trials.push({
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: `
-      <style>
-        .option-square {
-          width: 70px;
-          height: 70px;
-          border-radius: 10px;
-          border: 2px solid white;
-          cursor: pointer;
-          transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .option-square:hover {
-          transform: scale(1.1);
-          box-shadow: 0 0 10px white;
-        }
-        .decision-label {
-          text-align: center;
-          margin-bottom: 10px;
-          font-size: 20px;
-        }
-      </style>
-      <div style="color:white; background-color:black; height:100vh; padding-top:80px; font-size:22px;">
-        <div style="margin-bottom: 50px; text-align: center; font-size: 26px;">
-          <p>20 cards</p>
-          <div style="display: flex; justify-content: center; gap: 80px;">
-            <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${blueLabel}</div>
-            <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${redLabel}</div>
-          </div>
-        </div>
-        <div style="display: flex; justify-content: center; gap: 160px;">
-          <div>
-            <div class="decision-label">I bet 1.5 Pound</div>
-            <div style="display: flex; gap: 15px; justify-content: center;">
-              <div id="bet_blue" class="option-square" style="background-color: blue;"></div>
-              <div id="bet_red" class="option-square" style="background-color: red;"></div>
-            </div>
-          </div>
-          <div>
-            <div class="decision-label">I receive 0.5 Pound</div>
-            <div style="display: flex; gap: 15px; justify-content: center;">
-              <div id="receive_white_1" class="option-square" style="background-color: white; border: 2px solid black;"></div>
-              <div id="receive_white_2" class="option-square" style="background-color: white; border: 2px solid black;"></div>
-            </div>
-          </div>
+
+trials.push({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <style>
+      .option-square {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        border: 2px solid white;
+        display: inline-block;
+        margin: 0 10px;
+      }
+      .decision-label {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 20px;
+      }
+      .key-label {
+        font-size: 16px;
+        margin-top: 6px;
+        color: #ccc;
+      }
+    </style>
+    <div style="color:white; background-color:black; height:100vh; padding-top:80px; font-size:22px;">
+      <div style="margin-bottom: 50px; text-align: center; font-size: 26px;">
+        <p>20 cards</p>
+        <div style="display: flex; justify-content: center; gap: 80px;">
+          <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${blueLabel}</div>
+          <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${redLabel}</div>
         </div>
       </div>
-    `,
-    choices: "NO_KEYS",
-    trial_duration: Trial_DURATION,
-    data: {
-      trial_index: i + 1,
-      task: 'decision_trial',
-      condition: condition,
-      priming_color: primingColor,
-      blueLabel: blueLabel,
-      redLabel: redLabel
-
-    },
-    on_start: function(trial) {
-      trial.data.start_time = performance.now();
-    },
-    on_load: function() {
-      const startTime = performance.now();
-      const buttons = ['bet_blue', 'bet_red', 'receive_white_1', 'receive_white_2'];
-      buttons.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.addEventListener('click', () => {
-            const rt = performance.now() - startTime;
-            jsPsych.finishTrial({
-              response: id,
-              rt: rt,
-              condition: condition,
-              priming_color: primingColor,
-              blueLabel: blueLabel,
-              redLabel: redLabel
-            });
-          });
-        }
-      });
-    },
-    on_finish: function(data) {
-      if (data.response == null) {
-        data.rt = Trial_DURATION;
-        data.response = 'no_response';
-      }
-    }
-  });
+      <div style="display: flex; justify-content: center; gap: 160px;">
+        <div>
+          <div class="decision-label">I bet 1.5 Pound</div>
+          <div style="display: flex; gap: 15px; justify-content: center;">
+            <div class="option-square" style="background-color: blue;"></div>
+            <div class="option-square" style="background-color: red;"></div>
+          </div>
+          <div style="text-align: center;" class="key-label">Press 'S' for blue, 'D' for red</div>
+        </div>
+        <div>
+          <div class="decision-label">I receive 0.5 Pound</div>
+          <div style="display: flex; gap: 15px; justify-content: center;">
+            <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
+            <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
+          </div>
+          <div style="text-align: center;" class="key-label">Press 'K' or 'L' for white</div>
+        </div>
+      </div>
+    </div>
+  `,
+  choices: ['s', 'd', 'k', 'l'],
+  trial_duration: Trial_DURATION,
+  data: {
+    trial_index: i + 1,
+    task: 'decision_trial',
+    condition: condition,
+    priming_color: primingColor,
+    blueLabel: blueLabel,
+    redLabel: redLabel
+  },
+  on_finish: function(data) {
+    // Translate key to response
+    const keyMap = {
+      's': 'bet_blue',
+      'd': 'bet_red',
+      'k': 'receive_white_1',
+      'l': 'receive_white_2'
+    };
+    data.response = keyMap[data.response] || 'no_response';
+  }
+})
 }
+
 
 
 // -------------------------------
