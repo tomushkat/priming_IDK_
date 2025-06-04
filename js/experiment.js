@@ -209,11 +209,29 @@ for (let i = 0; i < total_trials; i++) {
     redLabel = '50%';
   }
 
-  if (condition === 'part_risky') {
-    const options = part_risky_options ;
-    const sampled = jsPsych.randomization.sampleWithoutReplacement(options, 1)[0];
-    blueLabel = `${sampled}%`;
-    redLabel = `${100 - sampled}%`;
+ if (condition === 'part_risky') {
+    const options = part_risky_options;
+
+    // Filter based on priming constraint
+    let validSamples = options.filter(val => {
+      if (primingColor === 'red') {
+        return (100 - val) >= 50;  // red percent ≥ 50
+      } else if (primingColor === 'blue') {
+        return val >= 50;         // blue percent ≥ 50
+      } else {
+        return true;              // black priming: no filter
+      }
+    });
+
+    if (validSamples.length > 0) {
+      const sampled = jsPsych.randomization.sampleWithoutReplacement(validSamples, 1)[0];
+      blueLabel = `${sampled}%`;
+      redLabel = `${100 - sampled}%`;
+    } else {
+      // Fallback to ambiguity if no valid sample (shouldn't normally happen)
+      blueLabel = '?';
+      redLabel = '?';
+    }
   }
 
   // Fixation cross
