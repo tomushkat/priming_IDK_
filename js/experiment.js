@@ -11,7 +11,19 @@ const jsPsych = initJsPsych({
   on_finish: handleExperimentFinish
 });
 
+if (sw_pavlovia) {
 
+  var pavlovia_init = {
+      type: "pavlovia",
+      command: "init"
+    }
+
+  var pavlovia_finish = {
+      type: "pavlovia",
+      command: "finish"  
+  }
+
+  };
 // -------------------------------
 // Welcome screens
 // -------------------------------
@@ -34,8 +46,9 @@ const welcome_screen = {
 if (sw_pavlovia) {
       // Deployment mode: redirect to Prolific
     const participant_id = jsPsych.data.getURLVariable('participant');
+    total_trials = pavlovia_trials
     jsPsych.data.addProperties({ participant_id });
-} 
+}; 
 
 const enter_id_screen = {
   type: jsPsychSurveyText,
@@ -494,10 +507,36 @@ const retry_age_screen = {
   }
 };
 
+const end_screen = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+      <div style="text-align: center; font-weight: bold; font-size: 26px; margin-bottom: 20px;">
+        Than you for participating in the experiment!
+      </div>
+  `,
+  choices: "NO_KEYS", 
+  trial_duration: welcome_screen_duration
+};
+     
+
 // -------------------------------
 // Start the experiment
 // -------------------------------
-jsPsych.run([welcome_screen, enter_id_screen, consent_screen, instructions
-  , ...trials
-  , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
-  , gender, Attention, retry_age_screen]);
+
+  if (sw_pavlovia) {
+
+    jsPsych.run([pavlovia_init, welcome_screen, enter_id_screen, consent_screen, instructions
+      , ...trials
+      , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
+      , gender, Attention, retry_age_screen, pavlovia_finish, end_screen]);
+  } else {
+
+    jsPsych.run([welcome_screen, enter_id_screen, consent_screen, instructions
+    , ...trials
+    , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
+    , gender, Attention, retry_age_screen, end_screen]);
+
+  };
+
+
+
