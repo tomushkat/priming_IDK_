@@ -26,7 +26,7 @@ function handleExperimentFinish() {
 // -------------------------------
 // Experiment Settings
 // -------------------------------
-const total_trials = 6;           // Total number of trials
+let total_trials = 6;           // Total number of trials
 const pavlovia_trials = 120;
 const part_risky_options = [10, 20, 30, 40, 60, 70, 80, 90];
 
