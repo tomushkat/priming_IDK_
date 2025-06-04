@@ -429,6 +429,46 @@ const Purpose = {
 };
 
 
+//---------------------------------
+// Manipulation Check       
+//---------------------------------
+
+const did_manipulate_question = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: `
+    <div style="font-size:22px; margin-bottom:30px;">
+      Do you think we did any manipulations on your choice?<br>
+    </div>
+  `,
+  choices: ["Yes", "No", "I don't know"],
+  button_html: (choice) =>
+    `<button class="jspsych-btn" style="font-size:20px; padding:12px 24px; margin: 6px;">${choice}</button>`,
+  on_finish: function(data) {
+    jsPsych.data.addProperties({ did_manipulate_choice: data.response });
+  }
+};
+
+const explain_manipulation = {
+  type: jsPsychSurveyText,
+  questions: [
+    {
+      prompt: "Please describe what kind of manipulation you think was done:",
+      name: "manipulation_explanation",
+      required: true
+    }
+  ],
+  button_label: "Continue"
+};
+
+const did_manipulate_block = {
+  timeline: [did_manipulate_question, explain_manipulation],
+  conditional_function: function() {
+    const last_response = jsPsych.data.get().last(1).values()[0].response;
+    // 0 = Yes, 1 = No, 2 = I don't know
+    return last_response === 0;
+  }
+};
+
 // -------------------------------
 // demographics
 // -------------------------------
@@ -527,13 +567,15 @@ const end_screen = {
 
     jsPsych.run([pavlovia_init, welcome_screen, enter_id_screen, consent_screen, instructions
       , ...trials
-      , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
+      , answer_questions, Honesty, Consecutively, Disturbances, Alone
+      , Purpose, did_manipulate_question, explain_manipulation, did_manipulate_block
       , gender, Attention, retry_age_screen, pavlovia_finish, end_screen]);
   } else {
 
     jsPsych.run([welcome_screen, enter_id_screen, consent_screen, instructions
     , ...trials
-    , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
+    , answer_questions, Honesty, Consecutively, Disturbances, Alone  
+    , Purpose, did_manipulate_question, explain_manipulation, did_manipulate_block
     , gender, Attention, retry_age_screen, end_screen]);
 
   };
