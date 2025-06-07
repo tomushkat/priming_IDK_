@@ -104,6 +104,32 @@ const consent_screen = {
 
 const colorOnLeft = jsPsych.randomization.sampleWithoutReplacement([true, false], 1)[0];
 jsPsych.data.addProperties({ colorOnLeft: colorOnLeft });
+let key_map;
+
+if (colorOnLeft) {
+  // Colorful on LEFT
+  key_map = {
+    's': 'bet_blue',
+    'd': 'bet_red',
+    'k': 'receive_white_1',
+    'l': 'receive_white_2'
+  };
+} else {
+  // Colorful on RIGHT
+  key_map = {
+    's': 'receive_white_1',
+    'd': 'receive_white_2',
+    'k': 'bet_blue',
+    'l': 'bet_red'
+  };
+}
+
+
+
+if (!sw_pavlovia) {
+  // If in deployment mode, add participant ID from URL
+  console.log("Colorful squares are on the " + (colorOnLeft ? "left" : "right") + " side for THIS participant.");
+}
 
 
 // -------------------------------
@@ -241,75 +267,106 @@ for (let i = 0; i < total_trials; i++) {
   trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
-            <style>
-        .option-square {
-          width: 70px;
-          height: 70px;
-          border-radius: 10px;
-          border: 2px solid white;
-          cursor: pointer;
-          transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .option-square:hover {
-          transform: scale(1.1);
-          box-shadow: 0 0 10px white;
-        }
-        .decision-label {
-          text-align: center;
-          margin-bottom: 10px;
-          font-size: 20px;
-        }
-      </style>
-      <div style="color:white; background-color:black; height:100vh; padding-top:80px; font-size:22px;">
-        <div style="margin-bottom: 50px; text-align: center; font-size: 26px;">
-          <p>20 cards</p>
-          <div style="display: flex; justify-content: center; gap: 80px;">
-            <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${blueLabel}</div>
-            <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${redLabel}</div>
+    <style>
+      .option-square {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        border: 2px solid white;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .option-square:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px white;
+      }
+      .decision-label {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 20px;
+      }
+    </style>
+    <div style="color:white; background-color:black; height:100vh; padding-top:80px; font-size:22px;">
+      <div style="margin-bottom: 50px; text-align: center; font-size: 26px;">
+       <p>20 cards</p>
+        <div style="display: flex; justify-content: center; gap: 80px;">
+          <div style="border: 2px solid blue; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${blueLabel}</div>
+          <div style="border: 2px solid red; width: 80px; height: 80px; font-size: 26px; line-height: 80px; border-radius: 10px;">${redLabel}</div>
+      </div>
+
+      ${
+      colorOnLeft
+      // Colorful on LEFT, White on RIGHT
+      ? `
+         <div style="display: flex; justify-content: center; gap: 160px;">
+      <!-- Colorful LEFT -->
+      <div>
+        <div class="decision-label">I bet 1.5 Pound</div>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="option-square" style="background-color: blue;"></div>
+            <div style="color:white; margin-top:6px; font-size:24px;">S</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="option-square" style="background-color: red;"></div>
+            <div style="color:white; margin-top:6px; font-size:24px;">D</div>
           </div>
         </div>
-        ${
-          colorOnLeft
-            ? `
-            <div style="display: flex; justify-content: center; gap: 160px;">
-              <div>
-                <div class="decision-label">I receive 0.5 Pound</div>
-                <div style="display: flex; gap: 15px; justify-content: center;">
-                  <div id="receive_white_1" class="option-square" style="background-color: white; border: 2px solid black;"></div>
-                  <div id="receive_white_2" class="option-square" style="background-color: white; border: 2px solid black;"></div>
-                </div>
-              </div>
-              <div>
-                <div class="decision-label">I bet 1.5 Pound</div>
-                <div style="display: flex; gap: 15px; justify-content: center;">
-                  <div id="bet_blue" class="option-square" style="background-color: blue;"></div>
-                  <div id="bet_red" class="option-square" style="background-color: red;"></div>
-                </div>
-              </div>
-            </div>
-            `
-            : `
-            <div style="display: flex; justify-content: center; gap: 160px;">
-              <div>
-                <div class="decision-label">I bet 1.5 Pound</div>
-                <div style="display: flex; gap: 15px; justify-content: center;">
-                  <div id="bet_blue" class="option-square" style="background-color: blue;"></div>
-                  <div id="bet_red" class="option-square" style="background-color: red;"></div>
-                </div>
-              </div>
-              <div>
-                <div class="decision-label">I receive 0.5 Pound</div>
-                <div style="display: flex; gap: 15px; justify-content: center;">
-                  <div id="receive_white_1" class="option-square" style="background-color: white; border: 2px solid black;"></div>
-                  <div id="receive_white_2" class="option-square" style="background-color: white; border: 2px solid black;"></div>
-                </div>
-              </div>
-            </div>
-            `
-        }
       </div>
+      <!-- White RIGHT -->
+      <div>
+        <div class="decision-label">I receive 0.5 Pound</div>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
+            <div style="color:white; margin-top:6px; font-size:24px;">K</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
+            <div style="color:white; margin-top:6px; font-size:24px;">L</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    `
+    // White LEFT, Colorful RIGHT
+    : `
+    <div style="display: flex; justify-content: center; gap: 160px;">
+      <!-- White LEFT -->
+      <div>
+        <div class="decision-label">I receive 0.5 Pound</div>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
+            <div style="color:white; margin-top:6px; font-size:24px;">S</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
+            <div style="color:white; margin-top:6px; font-size:24px;">D</div>
+          </div>
+        </div>
+      </div>
+      <!-- Colorful RIGHT -->
+      <div>
+        <div class="decision-label">I bet 1.5 Pound</div>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="option-square" style="background-color: blue;"></div>
+            <div style="color:white; margin-top:6px; font-size:24px;">K</div>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="option-square" style="background-color: red;"></div>
+            <div style="color:white; margin-top:6px; font-size:24px;">L</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    `
+      }  
+        </div>
+    </div>
     `,
-    choices: "NO_KEYS",
+    choices: ['s', 'd', 'k', 'l'],
     trial_duration: Trial_DURATION,
     data: {
       trial_index: i + 1,
@@ -317,38 +374,20 @@ for (let i = 0; i < total_trials; i++) {
       condition: condition,
       priming_color: primingColor,
       blueLabel: blueLabel,
-      redLabel: redLabel
+      redLabel: redLabel,
+      colorOnLeft: colorOnLeft // Save mapping in trial data
 
     },
     on_start: function(trial) {
       trial.data.start_time = performance.now();
     },
-    on_load: function() {
-      const startTime = performance.now();
-      const buttons = ['bet_blue', 'bet_red', 'receive_white_1', 'receive_white_2'];
-      buttons.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          el.addEventListener('click', () => {
-            const rt = performance.now() - startTime;
-            jsPsych.finishTrial({
-              response: id,
-              rt: rt,
-              condition: condition,
-              priming_color: primingColor,
-              blueLabel: blueLabel,
-              redLabel: redLabel
-            });
-          });
-        }
-      });
-    },
     on_finish: function(data) {
-      if (data.response == null) {
-        data.rt = Trial_DURATION;
-        data.response = 'no_response';
-      }
-    }
+      const key = data.response;
+      data.choice = key_map[key];
+      data.key_pressed = key;
+      if (!data.choice) data.choice = 'no_response';
+      if (!data.rt) data.rt = Trial_DURATION;
+  }
   });
 }
 
