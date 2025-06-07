@@ -109,16 +109,16 @@ let key_map;
 if (colorOnLeft) {
   // Colorful on LEFT
   key_map = {
-    's': 'bet_blue',
-    'd': 'bet_red',
+    'a': 'bet_blue',
+    's': 'bet_red',
     'k': 'receive_white_1',
     'l': 'receive_white_2'
   };
 } else {
   // Colorful on RIGHT
   key_map = {
-    's': 'receive_white_1',
-    'd': 'receive_white_2',
+    'a': 'receive_white_1',
+    's': 'receive_white_2',
     'k': 'bet_blue',
     'l': 'bet_red'
   };
@@ -305,11 +305,11 @@ for (let i = 0; i < total_trials; i++) {
         <div style="display: flex; gap: 15px; justify-content: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="option-square" style="background-color: blue;"></div>
-            <div style="color:white; margin-top:6px; font-size:24px;">S</div>
+            <div style="color:white; margin-top:6px; font-size:24px;">A</div>
           </div>
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="option-square" style="background-color: red;"></div>
-            <div style="color:white; margin-top:6px; font-size:24px;">D</div>
+            <div style="color:white; margin-top:6px; font-size:24px;">S</div>
           </div>
         </div>
       </div>
@@ -338,11 +338,11 @@ for (let i = 0; i < total_trials; i++) {
         <div style="display: flex; gap: 15px; justify-content: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
-            <div style="color:white; margin-top:6px; font-size:24px;">S</div>
+            <div style="color:white; margin-top:6px; font-size:24px;">A</div>
           </div>
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
-            <div style="color:white; margin-top:6px; font-size:24px;">D</div>
+            <div style="color:white; margin-top:6px; font-size:24px;">S</div>
           </div>
         </div>
       </div>
@@ -366,7 +366,7 @@ for (let i = 0; i < total_trials; i++) {
         </div>
     </div>
     `,
-    choices: ['s', 'd', 'k', 'l'],
+    choices: ['a', 's', 'k', 'l'],
     trial_duration: Trial_DURATION,
     data: {
       trial_index: i + 1,
