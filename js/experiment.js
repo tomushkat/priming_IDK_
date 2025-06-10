@@ -11,19 +11,15 @@ const jsPsych = initJsPsych({
   on_finish: handleExperimentFinish
 });
 
-if (sw_pavlovia) {
-
-  var pavlovia_init = {
-      type: "pavlovia",
-      command: "init"
+var pavlovia_init = {
+    type: "pavlovia",
+    command: "init"
     }
 
-  var pavlovia_finish = {
-      type: "pavlovia",
-      command: "finish"  
+ var pavlovia_finish = {
+    type: "pavlovia",
+    command: "finish"  
   }
-
-  };
 // -------------------------------
 // Welcome screens
 // -------------------------------
@@ -31,7 +27,7 @@ const welcome_screen = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: `
     <div style="font-size:30px;font-weight: bold;">
-      Welcome to the experiment
+      Welcome to the study
     </div>
   `,
   choices: "NO_KEYS", 
@@ -54,12 +50,12 @@ const enter_id_screen = {
   type: jsPsychSurveyText,
   questions: [
     {
-      prompt: "Thank you for your willingness to participate in our experiment. Please enter your prolific ID.",
+      prompt: "Thank you for your willingness to participate in our study. Please enter your prolific ID.",
       name: 'participant_id_manual',
       required: true
     }
   ],
-  button_label: "Proceed to the experiment"
+  button_label: "Proceed to the study"
 };
 
 // -------------------------------
@@ -82,7 +78,7 @@ const consent_screen = {
       <!-- Main body text with bold section headers using <strong> -->
       You are invited to participate in a research study.<br><br>
 
-      <strong>Duration:</strong> The study should last about 5 minutes.<br>
+      <strong>Duration:</strong> The study should last about 10 minutes.<br>
       <strong>Risks:</strong> There are no physical or emotional risks involved.<br>
       <strong>Confidentiality:</strong> Your data will be recorded, analyzed, and kept on file for the sake of possible future analysis.<br>
       We will do our best to maintain confidentiality by keeping your data under lock, and by separating your identity from the data when coding and analyzing them so that others will not be able to connect you with your data.<br>
@@ -137,31 +133,30 @@ if (!sw_pavlovia) {
 // -------------------------------
 const instructions = {
   type: jsPsychHtmlButtonResponse,
-  stimulus: `
+stimulus: `
     <div style="background-color:#222; color:white; padding:40px; font-size:18px; line-height:1.6; text-align:left;">
 
-      <p><strong>The experiment will last about 5 minutes.</strong></p>
-
-      <p>In this experiment, you will make a series of choices between a gamble with an uncertain payoff and a certain payoff. A sample screen is as follows:</p>
+      <p> In this experiment, you'll make a series of choices between a gamble (with an uncertain payoff) and a certain payoff. You'll see different card decks. Each deck contains 20 cards, either blue or red.
+Below are two examples of how the screen might look during the experiment:</p>
 
       <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0;">
         <!-- Full Risky Sample -->
         <div style="background-color:black; padding:20px; border-radius:10px;">
           <div style="text-align: center; color: white; font-size: 20px; margin-bottom: 20px;">20 cards</div>
           <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;">
-            <div style="border: 2px solid blue; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">50%</div>
-            <div style="border: 2px solid red; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">50%</div>
+            <div style="border: 2px solid blue; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">10</div>
+            <div style="border: 2px solid red; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">10</div>
           </div>
           <div style="display: flex; justify-content: center; gap: 60px;">
             <div style="text-align: center;">
-              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.5 Pound</div>
+              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.25 Dollars</div>
               <div style="display: flex; justify-content: center; gap: 10px;">
                 <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white;"></div>
                 <div style="width: 30px; height: 30px; background-color: red; border: 2px solid white;"></div>
               </div>
             </div>
             <div style="text-align: center;">
-              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Pound</div>
+              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Dollars</div>
                <div style="display: flex; justify-content: center; gap: 10px;">
                 <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
                 <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
@@ -179,14 +174,14 @@ const instructions = {
           </div>
           <div style="display: flex; justify-content: center; gap: 60px;">
             <div style="text-align: center;">
-              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.5 Pound</div>
+              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.25 Dollars</div>
                <div style="display: flex; justify-content: center; gap: 10px;">
                 <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white;"></div>
                 <div style="width: 30px; height: 30px; background-color: red; border: 2px solid white;"></div>
               </div>
             </div>
             <div style="text-align: center;">
-              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Pound</div>
+              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Dollars</div>
                <div style="display: flex; justify-content: center; gap: 10px;">
                 <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
                 <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
@@ -196,9 +191,9 @@ const instructions = {
         </div>
       </div>
 
-      <p>In each card deck, there are 20 cards. The symbol on each card indicates the probability of drawing each type of card (blue or red) from the deck. In the left example, there is a 50% chance of drawing a blue card and a 50% chance of drawing a red card. In the right example, the probability of drawing a blue (or red) card is unknown.</p>
-
-      <p>You will be asked to choose a color to bet on or to receive a guaranteed amount. The pound amount above the lower cards shows the amount you will earn if the selected color matches the card that is drawn. At the end of the experiment, one of your trials will be randomly selected, and you will be rewarded accordingly.</p>
+      <p> As shown in the left example, sometimes you'll see the exact number of blue and red cards (e.g., 10 of each), indicating a known probability (e.g., 10 chance for each color). In other cases, like the right example, a question mark (?) will appear on the cards, meaning the probabilities of drawing a blue or red card are unknown.
+For each choice, you'll either select a color to bet on (this is "I bet") or choose to receive a guaranteed amount (this is "I receive"). If you choose to bet, the pound (£) amount shown above the lower cards is what you'll win if the card drawn matches your chosen color. If it doesn't match, you'll win nothing for that gamble.
+At the end of the experiment, one of your choices from all the trials will be randomly selected to determine your final payment.</p>
 
       <p style="margin-top: 30px;"><strong>When you are ready to begin, press “Proceed”.</strong></p>
     </div>
@@ -207,6 +202,7 @@ const instructions = {
   button_html: (choice) =>
     `<button class="jspsych-btn" style="font-size:20px; padding:12px 24px; margin-top:20px;">${choice}</button>`
 };
+
 
 
 
@@ -235,15 +231,15 @@ for (let i = 0; i < total_trials; i++) {
   let redLabel = '?';
 
   if (condition === 'full_risky') {
-    blueLabel = '50%';
-    redLabel = '50%';
+    blueLabel = '10';
+    redLabel = '10';
   }
 
   if (condition === 'part_risky') {
     const options = part_risky_options ;
     const sampled = jsPsych.randomization.sampleWithoutReplacement(options, 1)[0];
-    blueLabel = `${sampled}%`;
-    redLabel = `${100 - sampled}%`;
+    blueLabel = `${sampled}`;
+    redLabel = `${20 - sampled}`;
   }
 
   // Fixation cross
@@ -301,7 +297,7 @@ for (let i = 0; i < total_trials; i++) {
          <div style="display: flex; justify-content: center; gap: 160px;">
       <!-- Colorful LEFT -->
       <div>
-        <div class="decision-label">I bet 1.5 Pound</div>
+        <div class="decision-label">I bet 1.25 Dollars</div>
         <div style="display: flex; gap: 15px; justify-content: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="option-square" style="background-color: blue;"></div>
@@ -315,7 +311,7 @@ for (let i = 0; i < total_trials; i++) {
       </div>
       <!-- White RIGHT -->
       <div>
-        <div class="decision-label">I receive 0.5 Pound</div>
+        <div class="decision-label">I receive 0.5 Dollars</div>
         <div style="display: flex; gap: 15px; justify-content: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
@@ -334,7 +330,7 @@ for (let i = 0; i < total_trials; i++) {
     <div style="display: flex; justify-content: center; gap: 160px;">
       <!-- White LEFT -->
       <div>
-        <div class="decision-label">I receive 0.5 Pound</div>
+        <div class="decision-label">I receive 0.5 Dollars</div>
         <div style="display: flex; gap: 15px; justify-content: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="option-square" style="background-color: white; border: 2px solid black;"></div>
@@ -348,7 +344,7 @@ for (let i = 0; i < total_trials; i++) {
       </div>
       <!-- Colorful RIGHT -->
       <div>
-        <div class="decision-label">I bet 1.5 Pound</div>
+        <div class="decision-label">I bet 1.25 Dollars</div>
         <div style="display: flex; gap: 15px; justify-content: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="option-square" style="background-color: blue;"></div>
@@ -429,7 +425,7 @@ const Consecutively = {
   type: jsPsychHtmlButtonResponse,
   stimulus: `
     <div style="font-size:22px; margin-bottom:30px;">
-      Did you complete the experiment consecutively?
+      Did you complete the study consecutively?
     </div>
   `,
   choices: ['Yes', "No"],
@@ -448,7 +444,7 @@ const Disturbances = {
   type: jsPsychHtmlButtonResponse,
   stimulus: `
     <div style="font-size:22px; margin-bottom:30px;">
-      While completing the experiment, did you experience any external disturbances?
+      While completing the study, did you study any external disturbances?
     </div>
   `,
   choices: ['Yes', "No"],
@@ -467,7 +463,7 @@ const Alone = {
   type: jsPsychHtmlButtonResponse,
   stimulus: `
     <div style="font-size:22px; margin-bottom:30px;">
-      Did you fill in this experiment alone or with someone else?
+      Did you fill in this study alone or with someone else?
     </div>
   `,
   choices: ['Alone', "With someone else"],
@@ -491,7 +487,7 @@ const Purpose = {
       required: true
     }
   ],
-  button_label: "Proceed to the experiment"
+  button_label: "Proceed to the study"
 };
 
 
@@ -577,7 +573,7 @@ const end_screen = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: `
       <div style="text-align: center; font-weight: bold; font-size: 26px; margin-bottom: 20px;">
-        Than you for participating in the experiment!
+        Thank you for participating in the study!
       </div>
   `,
   choices: "NO_KEYS", 
@@ -595,6 +591,7 @@ const end_screen = {
       , ...trials
       , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
       , gender, Attention, retry_age_screen, pavlovia_finish, end_screen]);
+
   } else {
 
     jsPsych.run([welcome_screen, consent_screen, instructions

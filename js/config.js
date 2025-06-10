@@ -27,15 +27,15 @@ function handleExperimentFinish() {
 // Experiment Settings
 // -------------------------------
 let total_trials = 6;           // Total number of trials
-const pavlovia_trials = 120;
-const part_risky_options = [10, 20, 30, 40, 60, 70, 80, 90];
+const pavlovia_trials = 6 * 15; // Total number of trials in Pavlovia (6 condition, 15 per condition)
+const part_risky_options = [1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19]; // Options for risky part
 
 // -------------------------------
 // Duration settings
 // -------------------------------
 const FIXATION_DURATION = 500;     // Duration of fixation screen (in ms)
 const PRIMING_DURATION = 200;      // Duration of priming screen (in ms)
-const Trial_DURATION = 10000;      // Duration of a trial (in ms)
+const Trial_DURATION = 6000;      // Duration of a trial (in ms)
 const answer_qeustions_screen_duration = 2000;
 const welcome_screen_duration = 1000
 
@@ -44,6 +44,8 @@ const welcome_screen_duration = 1000
 // -------------------------------
 const age_min = 0;                // Minimum age
 const age_max = 100;               //   Maximum age
+
+
 
 
 
