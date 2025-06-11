@@ -264,7 +264,7 @@ stimulus: `
 // -------------------------------
 // Define global variables
 // -------------------------------
-const trials = [];
+const all_trials = [];
 
 // Define three conditions: ambiguous, full_risky, part_risky
 let conditions = Array(total_trials / 3).fill('ambiguous')
@@ -298,7 +298,7 @@ for (let i = 0; i < total_trials; i++) {
   }
 
   // Fixation cross
-  trials.push({
+  all_trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: '<div style="width:100vw; height:100vh; background-color:black; display:flex; align-items:center; justify-content:center;"><div style="color:white; font-size:48px;">+</div></div>',
     choices: "NO_KEYS",
@@ -306,7 +306,7 @@ for (let i = 0; i < total_trials; i++) {
   });
 
  // Color priming screen
-  trials.push({
+  all_trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<div style="width:100vw; height:100vh; background-color:${primingColor};"></div>`,
     choices: "NO_KEYS",
@@ -315,7 +315,7 @@ for (let i = 0; i < total_trials; i++) {
   });
 
   // Decision screen
-  trials.push({
+  all_trials.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `
     <style>
@@ -442,7 +442,63 @@ for (let i = 0; i < total_trials; i++) {
   }
   });
 }
+// console.log('all_trials:', all_trials);
+//console.log('total_trials:', total_trials);
 
+const n_total_trials = all_trials.length;
+const first_half_trials = all_trials.slice(0, n_total_trials / 2);
+const second_half_trials = all_trials.slice(n_total_trials / 2);
+
+// console.log('first_half_trials:', first_half_trials);
+// console.log('second_half_trials:', second_half_trials);
+
+// The break screen trial:
+const break_screen = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <div style="
+      width: 100vw; height: 100vh;
+      display: flex; align-items: center; justify-content: center; background: #222;">
+      <div style="
+        background:rgb(7, 7, 7);
+        border-radius: 18px;
+       <!-- box-shadow: 0 4px 24px rgba(13, 199, 35, 0.15); -->
+        padding: 48px 40px;
+        max-width: 500px;
+        text-align: center;">
+        <span style="font-size: 2.3rem; font-weight: 500; color: #fff; line-height: 1.4;">
+          You will now have a <span style="font-weight:700; color:#FFD600;">${break_duration}</span> seconds break<br>
+          before the second part of the study.
+        </span>
+      </div>
+    </div>
+  `,
+  choices: "NO_KEYS",
+  trial_duration: break_seconds * 1000, // duration in ms
+};
+
+const preparation_screen = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <div style="
+      width: 100vw; height: 100vh;
+      display: flex; align-items: center; justify-content: center; background: #222;">
+      <div style="
+        background:rgb(7, 7, 7);
+        border-radius: 18px;
+       <!-- box-shadow: 0 4px 24px rgba(13, 199, 35, 0.15); -->
+        padding: 48px 40px;
+        max-width: 500px;
+        text-align: center;">
+        <span style="font-size: 2.3rem; font-weight: 500; color: #fff; line-height: 1.4;">
+          Get ready
+        </span>
+      </div>
+    </div>
+  `,
+  choices: "NO_KEYS",
+  trial_duration: preparation_seconds * 1000, // duration in ms
+};
 
 // -------------------------------
 // answer qeustions screen
@@ -663,15 +719,20 @@ const end_screen = {
   if (sw_pavlovia) {
 
     jsPsych.run([pavlovia_init, welcome_screen, consent_screen, instructions, example
-      , ...trials
-      , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
-      , gender, Attention, yellowScreenTrial, openQuestionTrial, retry_age_screen, pavlovia_finish, end_screen]);
+                , ...first_half_trials
+                , break_screen, preparation_screen
+                ,  ...second_half_trials
+                , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose,
+                , gender, Attention, yellowScreenTrial, openQuestionTrial,
+                , retry_age_screen, pavlovia_finish, end_screen]);
 
   } else {
 
     jsPsych.run([welcome_screen, consent_screen, instructions, example
-    , ...trials
-    , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
-    , gender, Attention, yellowScreenTrial, openQuestionTrial, retry_age_screen, end_screen]);
+                , ...first_half_trials
+                , break_screen, preparation_screen
+                , ...second_half_trials
+                , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
+                , gender, Attention, yellowScreenTrial, openQuestionTrial, retry_age_screen, end_screen]);
 
   };
