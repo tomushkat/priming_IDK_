@@ -589,6 +589,25 @@ const Attention = {
 };
 
 
+// 1. Yellow screen
+const yellowScreenTrial = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <div style="background-color:yellow; width:100vw; height:100vh;"></div>
+  `,
+  choices: "NO_KEYS",
+  trial_duration: welcome_screen_duration,
+};
+
+// 2. Open question
+const openQuestionTrial = {
+  type: jsPsychSurveyText,
+  questions: [
+    {prompt: "What color did you just see?", rows: 1, columns: 40}
+  ],
+  required: true,
+};
+
 // -------------------------------
 // Age
 // -------------------------------
@@ -646,13 +665,13 @@ const end_screen = {
     jsPsych.run([pavlovia_init, welcome_screen, consent_screen, instructions, example
       , ...trials
       , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
-      , gender, Attention, retry_age_screen, pavlovia_finish, end_screen]);
+      , gender, Attention, yellowScreenTrial, openQuestionTrial, retry_age_screen, pavlovia_finish, end_screen]);
 
   } else {
 
     jsPsych.run([welcome_screen, consent_screen, instructions, example
     , ...trials
     , answer_questions, Honesty, Consecutively, Disturbances, Alone, Purpose
-    , gender, Attention, retry_age_screen, end_screen]);
+    , gender, Attention, yellowScreenTrial, openQuestionTrial, retry_age_screen, end_screen]);
 
   };
