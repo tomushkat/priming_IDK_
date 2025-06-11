@@ -135,12 +135,17 @@ const instructions = {
   type: jsPsychHtmlButtonResponse,
 stimulus: `
     <div style="background-color:#222; color:white; padding:40px; font-size:18px; line-height:1.6; text-align:left;">
-
-      <p> In this study, you will make a series of choices between <strong>placing a bet</string> (with an uncertain payoff) and <string>receiving a fixed payoff</strong>.
-          You will encounter different card decks, each containing 20 cards that are either blue or red.
+     ${
+        colorOnLeft
+        ?
+        // Colorful (blue/red) on the LEFT, white on the RIGHT
+        `  
+      <p> In this study, you will make a series of choices between <strong>placing a bet</strong> (with an uncertain payoff) and <strong>receiving a fixed payoff</strong>.<br>
+          You will encounter different card decks, each containing 20 cards that are either <span style="color:#1E90FF; font-weight:bold;">blue</span> or <span style="color:#FF3030; font-weight:bold;">red</span>.
           Below are two examples of how the screen might appear during the study:</p>
 
       <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0;">
+      
         <!-- Full Risky Sample -->
         <div style="background-color:black; padding:20px; border-radius:10px;">
           <div style="text-align: center; color: white; font-size: 20px; margin-bottom: 20px;">20 cards</div>
@@ -193,13 +198,77 @@ stimulus: `
           </div>
         </div>
       </div>
+      `
+     : 
+      `
+           <p> In this study, you will make a series of choices between <strong>placing a bet</strong> (with an uncertain payoff) and <strong>receiving a fixed payoff</strong>.<br>
+          You will encounter different card decks, each containing 20 cards that are either <span style="color:#1E90FF; font-weight:bold;">blue</span> or <span style="color:#FF3030; font-weight:bold;">red</span>.
+          Below are two examples of how the screen might appear during the study:</p>
 
-      <p> As shown in the left example, sometimes you'll see an equal number of blue and red cards (e.g., 10 of each), indicating a known probability (e.g., a 50% chance for each color).
-          In other cases, like the right example, a question mark (?) will appear on the cards, meaning that the probability of drawing a blue or red card is unknown.
-          For each choice, you'll either select a color to bet on (this is "I bet") or choose to receive a guaranteed amount (this is "I receive").
+      <div style="display: flex; justify-content: center; gap: 40px; margin: 30px 0;">
+      
+        <!-- Full Risky Sample -->
+        <div style="background-color:black; padding:20px; border-radius:10px;">
+          <div style="text-align: center; color: white; font-size: 20px; margin-bottom: 20px;">20 cards</div>
+          <!--<div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;"> -->
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 20px;">
+            <div style="border: 2px solid blue; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">10</div>
+            <div style="border: 2px solid red; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">10</div> 
+          </div>
+          <div style="display: flex; justify-content: center; gap: 60px;">
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.25 Dollars</div>
+              <div style="display: flex; justify-content: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Dollars</div>
+               <div style="display: flex; justify-content: center; gap: 10px;">
+               <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white;"></div>
+                <div style="width: 30px; height: 30px; background-color: red; border: 2px solid white;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ambiguous Sample -->
+        <div style="background-color:black; padding:20px; border-radius:10px;">
+          <div style="text-align: center; color: white; font-size: 20px; margin-bottom: 20px;">20 cards</div>
+          <!--<<div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;" -->
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 20px;">
+            <div style="border: 2px solid blue; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">?</div>
+            <div style="border: 2px solid red; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">?</div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 60px;">
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.25 Dollars</div>
+               <div style="display: flex; justify-content: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+              </div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Dollars</div>
+               <div style="display: flex; justify-content: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white;"></div>
+                <div style="width: 30px; height: 30px; background-color: red; border: 2px solid white;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     `
+     }
+
+      <p> As shown in the left example, sometimes you'll see an equal number of <span style="color:#1E90FF; font-weight:bold;">blue</span> and <span style="color:#FF3030; font-weight:bold;">red</span> cards (e.g., 10 of each), indicating a known probability (e.g., a 50% chance for each color).
+          In other cases, like the right example, a question mark (?) will appear on the cards, meaning that the probability of drawing a <span style="color:#1E90FF; font-weight:bold;">blue</span> or <span style="color:#FF3030; font-weight:bold;">red</span> card is unknown.<br>
+          For each choice, you'll either select a color to bet on (this is "I bet") or choose to receive a guaranteed amount (this is "I receive").<br>
           If you choose to bet, the dollar ($) amount shown above the matching color boxes is what you'll win if the card drawn matches your chosen color.
-          If it doesn't match, you'll win nothing for that bet. At the end of the study, one of your choices from all the trials will be randomly selected to determine your final payment.
-          In any case, you will receive your full payment for participation. The bonus will be decided based on the card drawn and the decision you have made in the selected trial. For an example, see the next screen.</p>
+          If it doesn't match, you'll win nothing for that bet. At the end of the study, one of your choices from all the trials will be randomly selected to determine your final payment.<br>
+          In any case, you will receive your full payment for participation. The bonus will be decided based on the card drawn and the decision you have made in the selected trial.<br>
+          For an example, see the next screen.</p>
 
       <p style="margin-top: 30px;"><strong>When you are ready to begin, press “Proceed”.</strong></p>
     </div>
@@ -215,43 +284,84 @@ stimulus: `
 // -------------------------------
 const example = {
   type: jsPsychHtmlButtonResponse,
-stimulus: `
+  stimulus: `
     <div style="background-color:#222; color:white; padding:40px; font-size:18px; line-height:1.6; text-align:left;">
-
+      ${
+        colorOnLeft
+        ?
+        // Colorful (blue/red) on the LEFT, white on the RIGHT
+        `
       <p> For example, in this screen, you can see an example of a decision to be made between making a bet and receiving a fixed amount when there are
-          5 <span style="color:#1E90FF; font-weight:bold;">blue</span> cards
-          and 15 <span style="color:#FF3030; font-weight:bold;">red</span> cards in the deck.
-          Selecting "<span style="color:#1E90FF; font-weight:bold;">A</span>" means you choose to bet on drawing a <span style="color:#1E90FF; font-weight:bold;">blue</span> card,
-          selecting "<span style="color:#FF3030; font-weight:bold;">S</span>" means that you choose to bet on the <span style="color:#FF3030; font-weight:bold;">red</span> card,
-          and selecting "K" or "L" means that you choose to receive a fixed amount.</p>
+          <span style="color:#1E90FF; font-weight:bold;">5 blue</span> cards
+          and <span style="color:#FF3030; font-weight:bold;">15 red</span> cards in the deck.<br>
+          Clicking "<span style="color:#1E90FF; font-weight:bold;">A</span>" on the keyboard means you choose to bet on drawing a <span style="color:#1E90FF; font-weight:bold;">blue</span> card.<br>
+          Clicking "<span style="color:#FF3030; font-weight:bold;">S</span>" on the keyboard means that you choose to bet on the <span style="color:#FF3030; font-weight:bold;">red</span> card.<br>
+          Clicking "<span style=font-weight:bold;">K</span>" or "<span style=font-weight:bold;">L</span>" on the keyboard means that you choose to receive a fixed amount.</p>
+      <!-- Figure -->
 
-        <!-- Figure -->
         <div style="background-color:black; padding:20px; border-radius:10px;">
           <div style="text-align: center; color: white; font-size: 20px; margin-bottom: 20px;">20 cards</div>
-          <!-- <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 20px;">  -->
           <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 20px;">
             <div style="border: 2px solid blue; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">5</div>
             <div style="border: 2px solid red; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">15</div>
           </div>
           <div style="display: flex; justify-content: center; gap: 60px;">
+            <!-- Colorful left -->
             <div style="text-align: center;">
               <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.25 Dollars</div>
-               <div style="display: flex; justify-content: center; gap: 10px;">
-                <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white;"></div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white; margin-bottom: 5px;"></div>
                 <div style="width: 30px; height: 30px; background-color: red; border: 2px solid white;"></div>
               </div>
             </div>
+            <!-- White right -->
             <div style="text-align: center;">
               <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Dollars</div>
-               <div style="display: flex; justify-content: center; gap: 10px;">
-                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black; margin-bottom: 5px;"></div>
                 <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
+        `
+        :
+        // White on the LEFT, Colorful (blue/red) on the RIGHT
+        `
+         <p> For example, in this screen, you can see an example of a decision to be made between making a bet and receiving a fixed amount when there are
+          <span style="color:#1E90FF; font-weight:bold;">5 blue</span> cards
+          and <span style="color:#FF3030; font-weight:bold;">15 red</span> cards in the deck.<br>
+          Clicking "<span style=font-weight:bold;">A</span>" or "<span style=font-weight:bold;">S</span>" on the keyboard means that you choose to receive a fixed amount.</p>
+          Clicking "<span style="color:#1E90FF; font-weight:bold;">K</span>" on the keyboard means you choose to bet on drawing a <span style="color:#1E90FF; font-weight:bold;">blue</span> card.<br>
+          Clicking "<span style="color:#FF3030; font-weight:bold;">L</span>" on the keyboard means that you choose to bet on the <span style="color:#FF3030; font-weight:bold;">red</span> card.<br><p>
+          
+        <div style="background-color:black; padding:20px; border-radius:10px;">
+          <div style="text-align: center; color: white; font-size: 20px; margin-bottom: 20px;">20 cards</div>
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin-bottom: 20px;">
+            <div style="border: 2px solid blue; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">5</div>
+            <div style="border: 2px solid red; width: 60px; height: 60px; color: white; font-size: 20px; line-height: 60px; text-align: center;">15</div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 60px;">
+            <!-- White left -->
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I receive 0.5 Dollars</div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black; margin-bottom: 5px;"></div>
+                <div style="width: 30px; height: 30px; background-color: white; border: 2px solid black;"></div>
+              </div>
+            </div>
+            <!-- Colorful right -->
+            <div style="text-align: center;">
+              <div style="font-size: 14px; margin-bottom: 8px;">I bet 1.25 Dollars</div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                <div style="width: 30px; height: 30px; background-color: blue; border: 2px solid white; margin-bottom: 5px;"></div>
+                <div style="width: 30px; height: 30px; background-color: red; border: 2px solid white;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        `
+      }
       <p style="margin-top: 30px;"><strong>When you are ready to begin, press “Proceed”.</strong></p>
     </div>
   `,
@@ -467,14 +577,14 @@ const break_screen = {
         max-width: 500px;
         text-align: center;">
         <span style="font-size: 2.3rem; font-weight: 500; color: #fff; line-height: 1.4;">
-          You will now have a <span style="font-weight:700; color:#FFD600;">${break_duration}</span> seconds break<br>
+          You will now have a <span style="font-weight:700; color:#FFD600;">${break_duration_seconds_string}</span> seconds break<br>
           before the second part of the study.
         </span>
       </div>
     </div>
   `,
   choices: "NO_KEYS",
-  trial_duration: break_seconds * 1000, // duration in ms
+  trial_duration:  break_seconds * 1000, // duration in ms
 };
 
 const preparation_screen = {
